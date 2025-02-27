@@ -53,6 +53,31 @@ const animalSchema = new mongoose.Schema({
     neuter: {
         type: Boolean,
         default: false
+    },
+    inDate: {
+        type: Date,
+        required: [true, 'Date is required'],
+        validate: {
+            validator: function (value) {
+                return value <= new Date();
+            },
+            message: 'Date must be in the past'
+        }
+    },
+    outDate: {
+        type: Date,
+        required: [true, 'Date is required'],
+        validate: {
+            validator: function (value) {
+                return value >= this.inDate;
+            },
+            message: 'Date must be in the future'
+        }
+    },
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        index: true
     }
 }, { timestamps: true });
 
